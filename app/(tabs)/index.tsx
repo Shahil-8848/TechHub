@@ -1,75 +1,190 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import React, { useEffect } from "react";
+import { View, Text, StyleSheet, ScrollView, Pressable } from "react-native";
+import { Image } from "expo-image";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { router } from "expo-router";
+import { ShoppingCart } from "lucide-react-native";
+import Colors from "@/constants/Colors";
+import { products } from "@/mock/products";
+import { useCartStore } from "@/store/cart-store";
 
 export default function HomeScreen() {
+  const { items, addItem, getTotalItems } = useCartStore();
+  const totalItems = getTotalItems();
+
+  // Add some items to cart for demo purposes
+  useEffect(() => {
+    if (items.length === 0) {
+      // Add first 3 products to cart
+      products.slice(0, 3).forEach((product) => {
+        addItem(product);
+      });
+    }
+  }, []);
+
+  const navigateToCart = () => {
+    router.push("/cart");
+  };
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>E-Shop</Text>
+        <Pressable style={styles.cartButton} onPress={navigateToCart}>
+          <ShoppingCart size={24} color={Colors.dark.text} />
+          {totalItems > 0 && (
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>{totalItems}</Text>
+            </View>
+          )}
+        </Pressable>
+      </View>
+
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        <Text style={styles.sectionTitle}>Featured Products</Text>
+
+        <View style={styles.productsGrid}>
+          {products.map((product) => (
+            <Pressable
+              key={product.id}
+              style={styles.productCard}
+              onPress={() => {
+                addItem(product);
+                // Show feedback that item was added
+              }}
+            >
+              <View style={styles.imageContainer}>
+                {product.discount && (
+                  <View style={styles.discountBadge}>
+                    <Text style={styles.discountText}>{product.discount}%</Text>
+                  </View>
+                )}
+                <Image
+                  source={{ uri: product.image }}
+                  style={styles.productImage}
+                  contentFit="cover"
+                />
+              </View>
+              <View style={styles.productInfo}>
+                <Text style={styles.brand}>{product.brand}</Text>
+                <Text style={styles.productName}>{product.name}</Text>
+                <Text style={styles.price}>${product.price.toFixed(2)}</Text>
+              </View>
+            </Pressable>
+          ))}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  container: {
+    flex: 1,
+    backgroundColor: Colors.dark.background,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: Colors.dark.text,
+  },
+  cartButton: {
+    position: "relative",
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: Colors.dark.card,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  badge: {
+    position: "absolute",
+    top: -4,
+    right: -4,
+    backgroundColor: Colors.dark.accent,
+    borderRadius: 10,
+    minWidth: 20,
+    height: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 4,
+  },
+  badgeText: {
+    color: "#000",
+    fontSize: 12,
+    fontWeight: "bold",
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: 16,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: Colors.dark.text,
+    marginVertical: 16,
+  },
+  productsGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    marginBottom: 20,
+  },
+  productCard: {
+    width: "48%",
+    backgroundColor: Colors.dark.card,
+    borderRadius: 12,
+    marginBottom: 16,
+    overflow: "hidden",
+  },
+  imageContainer: {
+    position: "relative",
+    width: "100%",
+    height: 150,
+  },
+  productImage: {
+    width: "100%",
+    height: "100%",
+  },
+  discountBadge: {
+    position: "absolute",
+    top: 8,
+    left: 8,
+    backgroundColor: Colors.dark.accent,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+    zIndex: 1,
+  },
+  discountText: {
+    color: "#000",
+    fontSize: 12,
+    fontWeight: "bold",
+  },
+  productInfo: {
+    padding: 12,
+  },
+  brand: {
+    fontSize: 12,
+    color: Colors.dark.secondaryText,
+    marginBottom: 2,
+  },
+  productName: {
+    fontSize: 14,
+    fontWeight: "500",
+    color: Colors.dark.text,
+    marginBottom: 4,
+  },
+  price: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: Colors.dark.text,
   },
 });
