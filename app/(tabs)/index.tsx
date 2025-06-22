@@ -196,10 +196,10 @@ export default function EnhancedHomeScreen() {
           </Text>
 
           <View style={styles.priceContainer}>
-            <Text style={styles.price}>${product.price.toFixed(2)}</Text>
+            <Text style={styles.price}>Rs {product.price.toFixed(2)}</Text>
             {product.originalPrice && (
               <Text style={styles.originalPrice}>
-                ${product.originalPrice.toFixed(2)}
+                Rs{product.originalPrice.toFixed(2)}
               </Text>
             )}
           </View>
