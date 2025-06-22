@@ -3,10 +3,11 @@ import { Product } from '@/types/cart';
 export const products: Product[] = [
   {
     id: '1',
-    name: 'Electric kettle',
+    name: 'Gaming Mouse',
     brand: 'SMEG',
     price: 141.99,
-    image: 'https://images.unsplash.com/photo-1594495894542-a46cc73e081a?q=80&w=600&auto=format&fit=crop',
+    image: 'Tech-Hub\mock\download.jpeg',
+    category: 'Home Appliances',
     discount: 10,
   },
   {
@@ -15,6 +16,7 @@ export const products: Product[] = [
     brand: 'APPLE',
     price: 1130.00,
     image: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?q=80&w=600&auto=format&fit=crop',
+    category: 'Smartphones',
   },
   {
     id: '3',
@@ -22,6 +24,7 @@ export const products: Product[] = [
     brand: 'APPLE',
     price: 799.00,
     image: 'https://images.unsplash.com/photo-1613040809024-b4ef7ba99bc3?q=80&w=600&auto=format&fit=crop',
+    category: 'audio',
   },
   {
     id: '4',
@@ -29,6 +32,7 @@ export const products: Product[] = [
     brand: 'SMEG',
     price: 985.99,
     image: 'https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?q=80&w=600&auto=format&fit=crop',
+    category: 'Home Appliances',
     discount: 15,
   },
   {
@@ -37,6 +41,7 @@ export const products: Product[] = [
     brand: 'APPLE',
     price: 399.00,
     image: 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?q=80&w=600&auto=format&fit=crop',
+    category: 'accessories',
   },
   {
     id: '6',
@@ -44,12 +49,14 @@ export const products: Product[] = [
     brand: 'DELL',
     price: 450.00,
     image: 'https://images.unsplash.com/photo-1730794545099-14902983739d?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    category: 'Laptops',
   },{
     id: '7',
     name: 'iPad Pro 12.9"',
     brand: 'APPLE',
     price: 1099.00,
     image: 'https://images.unsplash.com/photo-1585770536735-27993a080586?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    category: 'Tablets',
   },
   {
     id: '8',
@@ -57,6 +64,7 @@ export const products: Product[] = [
     brand: 'AMAZON',
     price: 99.99,
     image: 'https://images.unsplash.com/photo-1593642532973-d31b6557fa68?q=80&w=600&auto=format&fit=crop',
+    category: 'Audio',
   }
 ];
 export type PaymentMethodType = "card" | "paypal" | "applepay";
